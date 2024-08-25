@@ -18,6 +18,7 @@ monthly_challenges = {
     "december": "20 kms per day",
 }
 
+
 def index(request):
     list_items = ""
     months = list(monthly_challenges.keys())
@@ -31,6 +32,7 @@ def index(request):
     """
     return HttpResponse(responseData)
 
+
 def monthly_challenge_by_num(request, month):
     try:
         months = list(monthly_challenges.keys())
@@ -39,11 +41,12 @@ def monthly_challenge_by_num(request, month):
     except:
         return HttpResponseNotFound("Not Valid Input")
 
+
 def monthly_challenge(request, month):
     try:
         challengeText = monthly_challenges[month]
         response_data = f"<h1><center>{challengeText}</center></h1>"
     except:
         return HttpResponseNotFound("Invalid Response")
-    
+
     return HttpResponse(response_data)
