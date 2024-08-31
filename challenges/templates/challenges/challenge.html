@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block page_title %}
+    {{ month|title}} Challenge</title>
+{% endblock page_title %}
+
+
+{% block content %}
+    
+    <h1>{{ month|title}} month's Challenge</h1>
+    {% if text is not None %}
+        <h2> {{ text}}</h2>
+    {% else %}
+        <p>No challenge for {{ month}}</p>
+    {% endif %}
+    <h4>
+        <a href="{% url "index-challenge"  %}"> Back </a>
+    </h4>
+{% endblock content %}
+
