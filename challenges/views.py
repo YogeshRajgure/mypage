@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.template.loader import render_to_string
 
@@ -36,7 +36,8 @@ def monthly_challenge_by_num(request, month):
         redirect_path = reverse("month-challenge", args=[months[month-1]])
         return HttpResponseRedirect(redirect_path)
     except:
-        return HttpResponseNotFound("Not Valid Input")
+        raise Http404()
+        # return HttpResponseNotFound("Not Valid Input")
 
 
 def monthly_challenge(request, month):
@@ -47,6 +48,7 @@ def monthly_challenge(request, month):
             "month": month,
         })
     except:
-        return HttpResponseNotFound("<h1>Invalid Response</h1>")
+        raise Http404()
+        # return HttpResponseNotFound("<h1>Invalid Response</h1>")
 
     
