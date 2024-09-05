@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect, Http404
 from django.urls import reverse
+from django.template.loader import render_to_string
+
 
 # Create your views here.
 monthly_challenges = {
@@ -15,22 +17,17 @@ monthly_challenges = {
     "september": "Strictly Vegan",
     "october": "20 kms per day",
     "november": "Strictly Vegan",
-    "december": "20 kms per day",
+    "december": None,
 }
 
 
 def index(request):
     list_items = ""
     months = list(monthly_challenges.keys())
-    for month in months:
-        month_path = reverse("month-challenge", args=[month])
-        list_items += f"<li><a href=\"{month_path}\">{month.capitalize()}</a></li>"
-    responseData = f"""
-    <ul>
-    {list_items}
-    </ul>
-    """
-    return HttpResponse(responseData)
+    
+    return render(request, "challenges/index.html", {
+        "months": months,
+    }) # HttpResponse(responseData)
 
 
 def monthly_challenge_by_num(request, month):
@@ -39,14 +36,19 @@ def monthly_challenge_by_num(request, month):
         redirect_path = reverse("month-challenge", args=[months[month-1]])
         return HttpResponseRedirect(redirect_path)
     except:
-        return HttpResponseNotFound("Not Valid Input")
+        raise Http404()
+        # return HttpResponseNotFound("Not Valid Input")
 
 
 def monthly_challenge(request, month):
     try:
         challengeText = monthly_challenges[month]
-        response_data = f"<h1><center>{challengeText}</center></h1>"
+        return render(request, "challenges/challenge.html", {
+            "text": challengeText,
+            "month": month,
+        })
     except:
-        return HttpResponseNotFound("Invalid Response")
+        raise Http404()
+        # return HttpResponseNotFound("<h1>Invalid Response</h1>")
 
-    return HttpResponse(response_data)
+    
